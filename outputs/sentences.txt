@@ -1,0 +1,8 @@
+hola (x4)
+buenos dias
+como estas
+hola (x5)
+como estas (x4)
+hola (x2)
+como estas
+hola (x3)
