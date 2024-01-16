@@ -133,3 +133,13 @@ def    get_sequences_and_labels(actions, data_path):
 def save_txt(file_name, content):
     with open(file_name, 'w') as archivo:
         archivo.write(content)
+
+def format_sentences(sent, sentence, repe_sent):
+    if len(sentence) > 1:
+        if sent in sentence[1]:
+            repe_sent += 1
+            sentence.pop(0)
+            sentence[0] = f"{sent} (x{repe_sent})"
+        else:
+            repe_sent = 1
+    return sentence

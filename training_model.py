@@ -31,3 +31,4 @@ if __name__ == "__main__":
     model_path = os.path.join(save_path, MODEL_NAME)
     
     training_model(data_path, model_path)
+    
