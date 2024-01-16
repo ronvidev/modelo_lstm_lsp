@@ -37,6 +37,10 @@ def get_actions(path):
     return out
 
 # CAPTURE SAMPLES
+def configurar_resolucion(camara):
+    camara.set(cv2.CAP_PROP_FRAME_WIDTH, 1280)
+    camara.set(cv2.CAP_PROP_FRAME_HEIGHT, 720)
+
 def draw_keypoints(image, results):
     '''
     Dibuja los keypoints en la imagen
@@ -112,7 +116,7 @@ def insert_keypoints_sequence(df, n_sample: int, kp_seq):
     return df
 
 # TRAINING MODEL
-def get_sequences_and_labels(actions, data_path):
+def    get_sequences_and_labels(actions, data_path):
     sequences, labels = [], []
     
     for label, action in enumerate(actions):

@@ -21,5 +21,5 @@ def text_to_speech(text):
     os.remove(filename)
 
 if __name__ == "__main__":
-    text = "Esto es una prueba"
+    text = "texto"
     text_to_speech(text)

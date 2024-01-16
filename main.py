@@ -1,5 +1,4 @@
 import os
-import warnings
 from capture_samples import capture_samples
 from create_keypoints import create_keypoints
 
@@ -13,10 +12,8 @@ data_path = os.path.join(root, "data")
 # capture_samples(word_path)
 
 # GENERAR LOS KEYPOINTS DE TODAS LAS PALABRAS
-# with warnings.catch_warnings():
-#     warnings.simplefilter("ignore")
-#     for word_name in os.listdir(words_path):
-#         word_path = os.path.join(words_path, word_name)
-#         hdf_path = os.path.join(data_path, f"{word_name}.h5")
-#         print(f'Creando keypoints de "{word_name}"...')
-#         create_keypoints(word_path, hdf_path)
+# for word_name in os.listdir(words_path):
+#     word_path = os.path.join(words_path, word_name)
+#     hdf_path = os.path.join(data_path, f"{word_name}.h5")
+#     print(f'Creando keypoints de "{word_name}"...')
+#     create_keypoints(word_path, hdf_path)
