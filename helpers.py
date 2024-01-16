@@ -116,7 +116,7 @@ def insert_keypoints_sequence(df, n_sample: int, kp_seq):
     return df
 
 # TRAINING MODEL
-def    get_sequences_and_labels(actions, data_path):
+def get_sequences_and_labels(actions, data_path):
     sequences, labels = [], []
     
     for label, action in enumerate(actions):
@@ -142,4 +142,4 @@ def format_sentences(sent, sentence, repe_sent):
             sentence[0] = f"{sent} (x{repe_sent})"
         else:
             repe_sent = 1
-    return sentence
+    return sentence, repe_sent

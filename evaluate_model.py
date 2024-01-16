@@ -33,8 +33,8 @@ def evaluate_model(model, threshold=0.7):
                     if res[np.argmax(res)] > threshold:
                         sent = actions[np.argmax(res)]
                         sentence.insert(0, sent)
-                        text_to_speech(sent)
-                        sentence = format_sentences(sent, sentence, repe_sent)
+                        # text_to_speech(sent)
+                        sentence, repe_sent = format_sentences(sent, sentence, repe_sent)
                         
                     count_frame = 0
                     kp_sequence = []
