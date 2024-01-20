@@ -1,12 +1,10 @@
 import os
 import cv2
-import mediapipe as mp
+from mediapipe.python.solutions.holistic import FACEMESH_CONTOURS, POSE_CONNECTIONS, HAND_CONNECTIONS
+from mediapipe.python.solutions.drawing_utils import draw_landmarks, DrawingSpec
 import numpy as np
 import pandas as pd
 from typing import NamedTuple
-
-mp_holistic = mp.solutions.holistic
-mp_drawing = mp.solutions.drawing_utils
 
 # GENERAL
 def mediapipe_detection(image, model):
@@ -45,36 +43,36 @@ def draw_keypoints(image, results):
     '''
     Dibuja los keypoints en la imagen
     '''
-    mp_drawing.draw_landmarks(
+    draw_landmarks(
         image,
         results.face_landmarks,
-        mp_holistic.FACEMESH_CONTOURS,
-        mp_drawing.DrawingSpec(color=(80, 110, 10), thickness=1, circle_radius=1),
-        mp_drawing.DrawingSpec(color=(80, 256, 121), thickness=1, circle_radius=1),
+        FACEMESH_CONTOURS,
+        DrawingSpec(color=(80, 110, 10), thickness=1, circle_radius=1),
+        DrawingSpec(color=(80, 256, 121), thickness=1, circle_radius=1),
     )
     # Draw pose connections
-    mp_drawing.draw_landmarks(
+    draw_landmarks(
         image,
         results.pose_landmarks,
-        mp_holistic.POSE_CONNECTIONS,
-        mp_drawing.DrawingSpec(color=(80, 22, 10), thickness=2, circle_radius=4),
-        mp_drawing.DrawingSpec(color=(80, 44, 121), thickness=2, circle_radius=2),
+        POSE_CONNECTIONS,
+        DrawingSpec(color=(80, 22, 10), thickness=2, circle_radius=4),
+        DrawingSpec(color=(80, 44, 121), thickness=2, circle_radius=2),
     )
     # Draw left hand connections
-    mp_drawing.draw_landmarks(
+    draw_landmarks(
         image,
         results.left_hand_landmarks,
-        mp_holistic.HAND_CONNECTIONS,
-        mp_drawing.DrawingSpec(color=(121, 22, 76), thickness=2, circle_radius=4),
-        mp_drawing.DrawingSpec(color=(121, 44, 250), thickness=2, circle_radius=2),
+        HAND_CONNECTIONS,
+        DrawingSpec(color=(121, 22, 76), thickness=2, circle_radius=4),
+        DrawingSpec(color=(121, 44, 250), thickness=2, circle_radius=2),
     )
     # Draw right hand connections
-    mp_drawing.draw_landmarks(
+    draw_landmarks(
         image,
         results.right_hand_landmarks,
-        mp_holistic.HAND_CONNECTIONS,
-        mp_drawing.DrawingSpec(color=(245, 117, 66), thickness=2, circle_radius=4),
-        mp_drawing.DrawingSpec(color=(245, 66, 230), thickness=2, circle_radius=2),
+        HAND_CONNECTIONS,
+        DrawingSpec(color=(245, 117, 66), thickness=2, circle_radius=4),
+        DrawingSpec(color=(245, 66, 230), thickness=2, circle_radius=2),
     )
 
 def save_frames(frames, output_folder):

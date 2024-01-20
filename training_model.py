@@ -18,7 +18,7 @@ def training_model(data_path, model_path):
 
     X = np.array(sequences)
     y = to_categorical(labels).astype(int)
-
+    
     model = get_model(len(actions))
     model.fit(X, y, epochs=NUM_EPOCH)
     model.summary()
