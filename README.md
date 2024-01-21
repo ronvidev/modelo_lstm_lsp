@@ -1,3 +1,5 @@
+Este es un modelo de una red neuronal que traduce Lengua de Señas Peruana (LSP) a texto (y voz). Utilicé MediaPipe para obtener los puntos de la seña y para el entrenamiento usé TensorFlow y Keras.
+
 ## SCRIPTS PRINCIPALES
 - capture_samples.py → captura las muestras y las ubica en la carpeta frame_actions.
 - create_keypoints.py → crea los keypoints que se usarán en el entrenamiento.
