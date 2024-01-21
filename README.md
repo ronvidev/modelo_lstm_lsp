@@ -16,7 +16,7 @@ helpers.py → funciones que se utilizan en los scripts principales.
 4. Realizar pruebas con evaluate_model.py
 
 ## Observaciones
-La información que está en Data puede que no funcione para versiones diferentes de Python a la que usé en el video. Así que se recomienda volver a generar los keypoints.
+La información que está en Data puede que no funcione para versiones diferentes de Python a la que usé en el video (3.11.3). Así que se recomienda volver a generar los keypoints.
 
 ## Video de la explicación del código:
 https://youtu.be/3EK0TxfoAMk 
