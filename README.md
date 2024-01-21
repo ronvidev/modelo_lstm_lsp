@@ -1,13 +1,13 @@
 ## SCRIPTS PRINCIPALES
-capture_samples.py → captura las muestras y las ubica en la carpeta frame_actions.
-create_keypoints.py → crea los keypoints que se usarán en el entrenamiento.
-training_model.py → entrena la red neuronal.
-evaluate_model.py → donde se realiza la prueba de la red neuronal.
+- capture_samples.py → captura las muestras y las ubica en la carpeta frame_actions.
+- create_keypoints.py → crea los keypoints que se usarán en el entrenamiento.
+- training_model.py → entrena la red neuronal.
+- evaluate_model.py → donde se realiza la prueba de la red neuronal.
 
 ## SCRIPTS SECUNDARIOS
-model.py → aquí se ajusta el modelo de la red neuronal.
-constants.py → ajustes de la red neuronal.
-helpers.py → funciones que se utilizan en los scripts principales.
+- model.py → aquí se ajusta el modelo de la red neuronal.
+- constants.py → ajustes de la red neuronal.
+- helpers.py → funciones que se utilizan en los scripts principales.
 
 ## Pasos para probar la red neuronal
 1. Capturar las muestras con capture_samples.py
