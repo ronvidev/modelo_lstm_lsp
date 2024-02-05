@@ -10,7 +10,7 @@ from constants import FONT, FONT_POS, FONT_SIZE, FRAME_ACTIONS_PATH, ROOT_PATH
 def capture_samples(path, margin_frame=2, min_cant_frames=5):
     '''
     ### CAPTURA DE MUESTRAS PARA UNA PALABRA
-    Recibe como parámetro la  ubicación de guardado y guarda los frames
+    Recibe como parámetro la ubicación de guardado y guarda los frames
     
     `path` ruta de la carpeta de la palabra \n
     `margin_frame` cantidad de frames que se ignoran al comienzo y al final \n
@@ -57,6 +57,6 @@ def capture_samples(path, margin_frame=2, min_cant_frames=5):
         cv2.destroyAllWindows()
 
 if __name__ == "__main__":
-    word_name = "censurado!"
+    word_name = "palabra"
     word_path = os.path.join(ROOT_PATH, FRAME_ACTIONS_PATH, word_name)
     capture_samples(word_path)

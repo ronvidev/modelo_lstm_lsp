@@ -13,9 +13,10 @@ def evaluate_model(model, threshold=0.7):
     count_frame = 0
     repe_sent = 1
     kp_sequence, sentence = [], []
+    actions = get_actions(DATA_PATH)
     
     with Holistic() as holistic_model:
-        video = cv2.VideoCapture(0)
+        video = cv2.VideoCapture(1)
         
         while video.isOpened():
             _, frame = video.read()
@@ -33,7 +34,7 @@ def evaluate_model(model, threshold=0.7):
                     if res[np.argmax(res)] > threshold:
                         sent = actions[np.argmax(res)]
                         sentence.insert(0, sent)
-                        # text_to_speech(sent)
+                        text_to_speech(sent)
                         sentence, repe_sent = format_sentences(sent, sentence, repe_sent)
                         
                     count_frame = 0
@@ -52,8 +53,6 @@ def evaluate_model(model, threshold=0.7):
         cv2.destroyAllWindows()
     
 if __name__ == "__main__":
-    actions = get_actions(DATA_PATH)
     model_path = os.path.join(MODELS_PATH, MODEL_NAME)
     lstm_model = load_model(model_path)
-    
     evaluate_model(lstm_model)
