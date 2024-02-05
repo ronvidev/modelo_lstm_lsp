@@ -22,7 +22,7 @@ def create_keypoints(frames_path, save_path):
             break
     
     print(data)
-    # data.to_hdf(save_path, key="data", mode="w")
+    data.to_hdf(save_path, key="data", mode="w")
 
 if __name__ == "__main__":
     words_path = os.path.join(ROOT_PATH, FRAME_ACTIONS_PATH)
