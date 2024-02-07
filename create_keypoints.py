@@ -19,9 +19,7 @@ def create_keypoints(frames_path, save_path):
             sample_path = os.path.join(frames_path, sample_name)
             keypoints_sequence = get_keypoints(model_holistic, sample_path)
             data = insert_keypoints_sequence(data, n_sample, keypoints_sequence)
-            break
-    
-    print(data)
+
     data.to_hdf(save_path, key="data", mode="w")
 
 if __name__ == "__main__":
