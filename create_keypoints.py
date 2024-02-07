@@ -1,7 +1,7 @@
 import os
 os.environ["TF_ENABLE_ONEDNN_OPTS"] = "0"
 
-import warnings
+# import warnings
 import pandas as pd
 from mediapipe.python.solutions.holistic import Holistic
 from helpers import get_keypoints, insert_keypoints_sequence
@@ -19,23 +19,24 @@ def create_keypoints(frames_path, save_path):
             sample_path = os.path.join(frames_path, sample_name)
             keypoints_sequence = get_keypoints(model_holistic, sample_path)
             data = insert_keypoints_sequence(data, n_sample, keypoints_sequence)
-            break
-    
-    print(data)
-    data.to_hdf(save_path, key="data", mode="w")
+        
+    try:
+        data.to_hdf(save_path, key="data", mode="w")
+    except Exception as e:
+        print(e)
 
 if __name__ == "__main__":
     words_path = os.path.join(ROOT_PATH, FRAME_ACTIONS_PATH)
     
-    with warnings.catch_warnings():
-        warnings.simplefilter("ignore")
+    # with warnings.catch_warnings():
         # GENERAR LOS KEYPOINTS DE TODAS LAS PALABRAS
-        for word_name in os.listdir(words_path):
-            word_path = os.path.join(words_path, word_name)
-            hdf_path = os.path.join(DATA_PATH, f"{word_name}.h5")
-            print(f'Creando keypoints de "{word_name}"...')
-            create_keypoints(word_path, hdf_path)
-            print(f"Keypoints creados!")
+        # warnings.simplefilter("ignore")
+    for word_name in os.listdir(words_path):
+        word_path = os.path.join(words_path, word_name)
+        hdf_path = os.path.join(DATA_PATH, f"{word_name}_38.h5")
+        print(f'Creando keypoints de "{word_name}"...')
+        create_keypoints(word_path, hdf_path)
+        print(f"Keypoints creados!")
             
         # GENERAR SOLO DE UNA PALABRA
         # word_name = "hola"

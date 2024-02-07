@@ -100,6 +100,7 @@ def get_keypoints(model, path):
         _, results = mediapipe_detection(frame, model)
         kp_frame = extract_keypoints(results)
         kp_seq = np.concatenate([kp_seq, [kp_frame]] if kp_seq.size > 0 else [[kp_frame]])
+        
     return kp_seq
 
 def insert_keypoints_sequence(df, n_sample: int, kp_seq):
@@ -111,6 +112,7 @@ def insert_keypoints_sequence(df, n_sample: int, kp_seq):
         data = {'sample': n_sample, 'frame': frame + 1,'keypoints': [keypoints]}
         df_keypoints = pd.DataFrame(data)
         df = pd.concat([df, df_keypoints])
+    
     return df
 
 # TRAINING MODEL
