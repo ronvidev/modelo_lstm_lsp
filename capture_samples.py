@@ -1,11 +1,10 @@
 import os
-os.environ['TF_ENABLE_ONEDNN_OPTS'] = '0'
-
 import cv2
 import numpy as np
 from mediapipe.python.solutions.holistic import Holistic
-from helpers import create_folder, draw_keypoints, mediapipe_detection, save_frames, there_hand
-from constants import FONT, FONT_POS, FONT_SIZE, FRAME_ACTIONS_PATH, ROOT_PATH
+from helpers import *
+from constants import *
+from datetime import datetime
 
 def capture_samples(path, margin_frame=2, min_cant_frames=5):
     '''
@@ -18,8 +17,6 @@ def capture_samples(path, margin_frame=2, min_cant_frames=5):
     '''
     create_folder(path)
     
-    cant_sample_exist = len(os.listdir(path))
-    count_sample = 0
     count_frame = 0
     frames = []
     
@@ -39,10 +36,10 @@ def capture_samples(path, margin_frame=2, min_cant_frames=5):
             else:
                 if len(frames) > min_cant_frames + margin_frame:
                     frames = frames[:-margin_frame]
-                    output_folder = os.path.join(path, f"sample_{cant_sample_exist + count_sample + 1}")
+                    today = datetime.now().strftime('%y%m%d%H%M%S%f')
+                    output_folder = os.path.join(path, f"sample_{today}")
                     create_folder(output_folder)
                     save_frames(frames, output_folder)
-                    count_sample += 1
                 
                 frames = []
                 count_frame = 0
@@ -57,6 +54,6 @@ def capture_samples(path, margin_frame=2, min_cant_frames=5):
         cv2.destroyAllWindows()
 
 if __name__ == "__main__":
-    word_name = "palabra"
-    word_path = os.path.join(ROOT_PATH, FRAME_ACTIONS_PATH, word_name)
+    word_name = "word"
+    word_path = os.path.join(FRAME_ACTIONS_PATH, word_name)
     capture_samples(word_path)

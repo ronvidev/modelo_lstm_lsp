@@ -1,0 +1,18 @@
+{
+  "model_name": "model-lsp",
+  "words": [
+    {
+      "id": "hola",
+      "glosa": "HOLA",
+      "variants": [
+        "izq",
+        "der"
+      ]
+    },
+    {
+      "id": "como_estas",
+      "glosa": "¿CÓMO ESTÁS?",
+      "variants": null
+    }
+  ]
+}

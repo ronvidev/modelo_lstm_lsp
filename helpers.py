@@ -4,7 +4,7 @@ from mediapipe.python.solutions.holistic import FACEMESH_CONTOURS, POSE_CONNECTI
 from mediapipe.python.solutions.drawing_utils import draw_landmarks, DrawingSpec
 import numpy as np
 import pandas as pd
-from typing import NamedTuple
+import matplotlib.pyplot as plt
 
 # GENERAL
 def mediapipe_detection(image, model):
@@ -23,10 +23,10 @@ def create_folder(path):
     if not os.path.exists(path):
         os.makedirs(path)
 
-def there_hand(results: NamedTuple) -> bool:
+def there_hand(results) -> bool:
     return results.left_hand_landmarks or results.right_hand_landmarks
 
-def get_actions(path):
+def get_word_actions(path):
     out = []
     for action in os.listdir(path):
         name, ext = os.path.splitext(action)
@@ -129,6 +129,21 @@ def get_sequences_and_labels(actions, data_path):
             
     return sequences, labels
 
+def show_summary(history):
+    plt.plot(history.history['accuracy'], label='Precisión de entrenamiento')
+    plt.plot(history.history['val_accuracy'], label='Precisión de validación')
+    plt.xlabel('Épocas')
+    plt.ylabel('Precisión')
+    plt.legend()
+    plt.show()
+
+    plt.plot(history.history['loss'], label='Pérdida de entrenamiento')
+    plt.plot(history.history['val_loss'], label='Pérdida de validación')
+    plt.xlabel('Épocas')
+    plt.ylabel('Pérdida')
+    plt.legend()
+    plt.show()
+
 # EVALUATION
 def save_txt(file_name, content):
     with open(file_name, 'w') as archivo:
@@ -143,3 +158,10 @@ def format_sentences(sent, sentence, repe_sent):
         else:
             repe_sent = 1
     return sentence, repe_sent
+
+def pad_secuences(lista_A, max_longitud):
+  list_0 = lista_A[0]
+  for _ in range(len(lista_A), max_longitud):
+    lista_A.insert(0, [0] * len(list_0))
+
+  return lista_A[-max_longitud:]
