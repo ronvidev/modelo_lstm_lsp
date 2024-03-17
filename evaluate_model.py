@@ -7,6 +7,7 @@ from constants import *
 from text_to_speech import text_to_speech
 from utils import Utils
 
+
 def evaluate_model(threshold=0.6):
     count_frame = 0
     repe_sent = 1

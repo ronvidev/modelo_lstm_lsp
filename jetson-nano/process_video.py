@@ -2,7 +2,7 @@ import os
 import cv2
 import numpy as np
 
-def process_video(input_path, target_fps=12):
+def process_video(input_path, target_fps=15):
     # Ubicación de guardado
     new_name = f"{os.path.splitext(os.path.basename(input_path))[0]}_PROCESADO.mp4"
     output_path = os.path.join(os.path.dirname(input_path), new_name)

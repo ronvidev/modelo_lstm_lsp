@@ -1,23 +1,27 @@
+import os
 import cv2
 import numpy as np
 from mediapipe.python.solutions.holistic import Holistic
 from keras.models import load_model
 from helpers import *
 from constants import *
+from process_video import process_video
 
-def evaluate_model(threshold=0.6):
+def evaluate_model(video_path, threshold=0.7):
     count_frame = 0
-    repe_sent = 1
-    kp_sequence, sentence = [], []
-    
+    kp_sequence, sentences = [], []
+
     words_id = get_words_id()
     models = [load_model(model_path) for model_path in get_models_path()]
     
     with Holistic() as holistic_model:
-        video = cv2.VideoCapture(0)
+        video = cv2.VideoCapture(video_path)
         
         while video.isOpened():
-            _, frame = video.read()
+            ret, frame = video.read()
+            
+            if not ret:
+                break
 
             image, results = mediapipe_detection(frame, holistic_model)
             
@@ -26,6 +30,7 @@ def evaluate_model(threshold=0.6):
                 count_frame += 1
                 
             elif count_frame >= MIN_LENGTH_FRAMES:
+                print(count_frame)
                 if count_frame <= 7:
                     print("carga modelo 7")
                     kp_sequence = pad_secuences(kp_sequence, 7)
@@ -39,28 +44,35 @@ def evaluate_model(threshold=0.6):
                 else:
                     print("carga modelo 18")
                     kp_sequence = pad_secuences(kp_sequence, 18)
-                    model = models[2]                
-                 
+                    model = models[2]
+                    
                 res = model.predict(np.expand_dims(kp_sequence, axis=0))[0]
                 
-                if res[np.argmax(res)] > threshold:
-                    sent = get_word_by_id(words_id[np.argmax(res)])
-                    sentence.insert(0, sent)
-                    sentence, repe_sent = format_sentences(sent, sentence, repe_sent)
+                sent = get_word_by_id(words_id[np.argmax(res)])
                 
+                # percent = res[np.argmax(res)]
+                # if percent > threshold:
+                #     pass
+                # else:
+                #     sent = f"D: {sent} ({round(float(percent), 2)*100}%)"
+                    
+                print(sent)
+                sentences.append(sent)
+                    
                 count_frame = 0
                 kp_sequence = []
+                
+            # draw_keypoints(image, results)
+            # cv2.imshow('Traductor LSP', image)
+            # cv2.waitKey(10)
             
-            cv2.rectangle(image, (0,0), (640, 35), (245, 117, 16), -1)
-            cv2.putText(image, ' | '.join(sentence), FONT_POS, FONT, FONT_SIZE, (255, 255, 255))
-            
-            draw_keypoints(image, results)
-            cv2.imshow('Traductor LSP', image)
-            if cv2.waitKey(10) & 0xFF == ord('q'):
-                break
-                    
         video.release()
         cv2.destroyAllWindows()
+        return sentences
     
+
 if __name__ == "__main__":
-    evaluate_model()
+    video_path = r"F:\CarpetasW\Imágenes\Álbum de cámara\WIN_20240316_22_31_41_Pro.mp4"
+    video_path = process_video(video_path, 12)
+    resp = evaluate_model(video_path)
+    print(resp)
