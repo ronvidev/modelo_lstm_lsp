@@ -4,8 +4,9 @@ from mediapipe.python.solutions.holistic import FACEMESH_CONTOURS, POSE_CONNECTI
 from mediapipe.python.solutions.drawing_utils import draw_landmarks, DrawingSpec
 import numpy as np
 import pandas as pd
+from constants import DATA_JSON_PATH, MODELS_PATH
+import json
 
-# GENERAL
 def mediapipe_detection(image, model):
     image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
     image.flags.writeable = False
@@ -14,26 +15,9 @@ def mediapipe_detection(image, model):
     image = cv2.cvtColor(image, cv2.COLOR_RGB2BGR)
     return image, results
 
-def create_folder(path):
-    '''
-    ### CREAR CARPETA SI NO EXISTE
-    Si ya existe, no hace nada.
-    '''
-    if not os.path.exists(path):
-        os.makedirs(path)
-
 def there_hand(results) -> bool:
     return results.left_hand_landmarks or results.right_hand_landmarks
 
-def get_actions(path):
-    out = []
-    for action in os.listdir(path):
-        name, ext = os.path.splitext(action)
-        if ext == ".h5":
-            out.append(name)
-    return out
-
-# CAPTURE SAMPLES
 def configurar_resolucion(camara):
     camara.set(cv2.CAP_PROP_FRAME_WIDTH, 1280)
     camara.set(cv2.CAP_PROP_FRAME_HEIGHT, 720)
@@ -74,7 +58,6 @@ def draw_keypoints(image, results):
         DrawingSpec(color=(245, 66, 230), thickness=2, circle_radius=2),
     )
 
-# CREATE KEYPOINTS
 def extract_keypoints(results):
     pose = np.array([[res.x, res.y, res.z, res.visibility] for res in results.pose_landmarks.landmark]).flatten() if results.pose_landmarks else np.zeros(33*4)
     face = np.array([[res.x, res.y, res.z] for res in results.face_landmarks.landmark]).flatten() if results.face_landmarks else np.zeros(468*3)
@@ -109,7 +92,6 @@ def insert_keypoints_sequence(df, n_sample: int, kp_seq):
     
     return df
 
-# EVALUATION
 def save_txt(file_name, content):
     with open(file_name, 'w') as archivo:
         archivo.write(content)
@@ -130,3 +112,40 @@ def pad_secuences(lista_A, max_longitud):
     lista_A.insert(0, [0] * len(list_0))
 
   return lista_A[-max_longitud:]
+
+def get_words_id():
+    with open(DATA_JSON_PATH, 'r', encoding="utf-8") as json_file:
+        json_data = json.load(json_file)
+        lista = []
+        for word in json_data["words"]:
+            variants = word["variants"]
+            if variants:
+                for variant in variants:
+                    lista.append(f'{word["id"]}-{variant}')
+                continue
+            lista.append(word["id"])
+            
+        return lista
+    
+def get_word_by_id(full_id:str):
+    with open(DATA_JSON_PATH, 'r', encoding="utf-8") as json_file:
+        json_data = json.load(json_file)
+        id_parts = full_id.split("-")
+        word_id = id_parts[0]
+
+        for word in json_data["words"]:
+            if word["id"] == word_id:
+                
+                if len(id_parts) == 2:
+                    variant = id_parts[1]
+                    if word["variants"] and variant not in word["variants"]:
+                        return None
+
+                return word["glosa"]
+            
+def get_models_path():
+    with open(DATA_JSON_PATH, 'r', encoding="utf-8") as json_file:
+        json_data = json.load(json_file)
+        name = json_data["model_name"]
+        ext = json_data["model_extension"]
+        return [os.path.join(MODELS_PATH, f"{name}-{model_num}{ext}") for model_num in json_data["models"]]

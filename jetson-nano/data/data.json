@@ -1,0 +1,38 @@
+{
+  "model_name": "model_lsp",
+  "model_extension": ".keras",
+  "models": [
+    "7",
+    "12",
+    "18"
+  ],
+  "words": [
+    {
+      "id": "hola",
+      "glosa": "HOLA",
+      "has_keypoints": true,
+      "variants": [
+        "izq",
+        "der"
+      ]
+    },
+    {
+      "id": "como_estas",
+      "glosa": "¿CÓMO ESTÁS?",
+      "has_keypoints": true,
+      "variants": null
+    },
+    {
+      "id": "adios",
+      "glosa": "ADIÓS",
+      "has_keypoints": true,
+      "variants": null
+    },
+    {
+      "id": "buenos_dias",
+      "glosa": "BUENOS DÍAS",
+      "has_keypoints": true,
+      "variants": null
+    }
+  ]
+}

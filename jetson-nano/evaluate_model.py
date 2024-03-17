@@ -1,16 +1,18 @@
 import cv2
 import numpy as np
-import os
 from mediapipe.python.solutions.holistic import Holistic
-from tensorflow.keras.models import load_model
+from keras.models import load_model
 from helpers import *
 from constants import *
 
-def evaluate_model(models, threshold=0.6):
+def evaluate_model(threshold=0.6):
     count_frame = 0
     repe_sent = 1
     kp_sequence, sentence = [], []
-    actions = ["words"]
+    
+    words_id = get_words_id()
+    
+    models = [load_model(model_path) for model_path in get_models_path()]
     
     with Holistic() as holistic_model:
         video = cv2.VideoCapture(0)
@@ -43,7 +45,7 @@ def evaluate_model(models, threshold=0.6):
                 res = model.predict(np.expand_dims(kp_sequence, axis=0))[0]
                 
                 if res[np.argmax(res)] > threshold:
-                    sent = words_format[actions[np.argmax(res)]]
+                    sent = get_word_by_id(words_id[np.argmax(res)])
                     sentence.insert(0, sent)
                     sentence, repe_sent = format_sentences(sent, sentence, repe_sent)
                 
@@ -62,8 +64,4 @@ def evaluate_model(models, threshold=0.6):
         cv2.destroyAllWindows()
     
 if __name__ == "__main__":
-    model_path_7 = os.path.join(MODELS_PATH, f"actions_7.keras")
-    model_path_12 = os.path.join(MODELS_PATH, f"actions_12.keras")
-    model_path_18 = os.path.join(MODELS_PATH, f"actions_18.keras")
-    lstm_models = [load_model(model_path_7), load_model(model_path_12), load_model(model_path_18)]
-    evaluate_model(lstm_models)
+    evaluate_model()

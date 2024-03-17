@@ -49,7 +49,7 @@ def evaluate_model(video_path, threshold=0.7):
                     
                 res = model.predict(np.expand_dims(kp_sequence, axis=0))[0]
                 
-                sent = words_format[actions[np.argmax(res)]]
+                sent = utils.get_word_by_id(actions[np.argmax(res)])
                 
                 # percent = res[np.argmax(res)]
                 # if percent > threshold:
@@ -73,7 +73,7 @@ def evaluate_model(video_path, threshold=0.7):
     
 
 if __name__ == "__main__":
-    video_path = r"F:\CarpetasW\Imágenes\Álbum de cámara\WIN_20240315_13_35_10_Pro.mp4"
-    video_path = process_video(video_path, 10)
+    video_path = r"F:\CarpetasW\Imágenes\Álbum de cámara\WIN_20240316_22_31_41_Pro.mp4"
+    video_path = process_video(video_path, 12)
     resp = evaluate_model(video_path)
     print(resp)
