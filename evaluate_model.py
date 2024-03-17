@@ -1,4 +1,3 @@
-import os
 import cv2
 import numpy as np
 from mediapipe.python.solutions.holistic import Holistic
@@ -6,12 +5,17 @@ from keras.models import load_model
 from helpers import *
 from constants import *
 from text_to_speech import text_to_speech
+from utils import Utils
 
-def evaluate_model(models, threshold=0.6):
+def evaluate_model(threshold=0.6):
     count_frame = 0
     repe_sent = 1
     kp_sequence, sentence = [], []
-    actions = get_word_actions(DATA_PATH)
+    
+    utils = Utils()
+    words_id = utils.get_words_id()
+    
+    models = [load_model(model_path) for model_path in utils.get_models_path()]
     
     with Holistic() as holistic_model:
         video = cv2.VideoCapture(0)
@@ -40,14 +44,14 @@ def evaluate_model(models, threshold=0.6):
                     print("carga modelo 18")
                     kp_sequence = pad_secuences(kp_sequence, 18)
                     model = models[2]
-                    
+                
                 res = model.predict(np.expand_dims(kp_sequence, axis=0))[0]
                 
                 if res[np.argmax(res)] > threshold:
-                    sent = words_format[actions[np.argmax(res)]]
-                    text_to_speech(sent)
+                    sent = utils.get_word_by_id(words_id[np.argmax(res)])
                     sentence.insert(0, sent)
                     sentence, repe_sent = format_sentences(sent, sentence, repe_sent)
+                    text_to_speech(sent)
                 
                 count_frame = 0
                 kp_sequence = []
@@ -64,8 +68,5 @@ def evaluate_model(models, threshold=0.6):
         cv2.destroyAllWindows()
     
 if __name__ == "__main__":
-    model_path_7 = os.path.join(MODELS_PATH, f"actions_7.keras")
-    model_path_12 = os.path.join(MODELS_PATH, f"actions_12.keras")
-    model_path_18 = os.path.join(MODELS_PATH, f"actions_18.keras")
-    lstm_models = [load_model(model_path_7), load_model(model_path_12), load_model(model_path_18)]
-    evaluate_model(lstm_models)
+    evaluate_model()
+    

@@ -5,6 +5,7 @@ from mediapipe.python.solutions.holistic import Holistic
 from helpers import *
 from constants import *
 from datetime import datetime
+from utils import Utils
 
 def capture_samples(path, margin_frame=2, min_cant_frames=5):
     '''
@@ -54,6 +55,7 @@ def capture_samples(path, margin_frame=2, min_cant_frames=5):
         cv2.destroyAllWindows()
 
 if __name__ == "__main__":
-    word_name = "word"
-    word_path = os.path.join(FRAME_ACTIONS_PATH, word_name)
+    utils = Utils()
+    utils.add_word("word", "PALABRA")
+    word_path = utils.get_word_path()
     capture_samples(word_path)

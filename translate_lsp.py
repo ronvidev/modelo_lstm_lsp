@@ -6,16 +6,14 @@ from keras.models import load_model
 from helpers import *
 from constants import *
 from process_video import process_video
+from utils import Utils
 
 def evaluate_model(video_path, threshold=0.7):
+    utils = Utils()
     count_frame = 0
     kp_sequence, sentences = [], []
-    actions = get_word_actions(DATA_PATH)
-    
-    model_path_7 = os.path.join(MODELS_PATH, f"actions_7.keras")
-    model_path_12 = os.path.join(MODELS_PATH, f"actions_12.keras")
-    model_path_18 = os.path.join(MODELS_PATH, f"actions_18.keras")
-    models = [load_model(model_path_7), load_model(model_path_12), load_model(model_path_18)]
+    actions = utils.get_words_id()
+    models = [load_model(model_path) for model_path in utils.get_models_path()]
     
     with Holistic() as holistic_model:
         video = cv2.VideoCapture(video_path)
