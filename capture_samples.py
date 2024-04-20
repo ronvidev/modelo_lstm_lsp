@@ -25,7 +25,7 @@ def capture_samples(path, margin_frame=2, min_cant_frames=5):
         video = cv2.VideoCapture(0)
         
         while video.isOpened():
-            frame = video.read()[1] 
+            _, frame = video.read()
             image, results = mediapipe_detection(frame, holistic_model)
             
             if there_hand(results):
@@ -55,6 +55,6 @@ def capture_samples(path, margin_frame=2, min_cant_frames=5):
         cv2.destroyAllWindows()
 
 if __name__ == "__main__":
-    word_name = "palabra"
+    word_name = "prueba"
     word_path = os.path.join(ROOT_PATH, FRAME_ACTIONS_PATH, word_name)
     capture_samples(word_path)
