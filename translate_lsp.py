@@ -62,9 +62,9 @@ def evaluate_model(video_path, threshold=0.7):
                 count_frame = 0
                 kp_sequence = []
                 
-            draw_keypoints(image, results)
-            cv2.imshow('Traductor LSP', image)
-            cv2.waitKey(10)
+            # draw_keypoints(image, results)
+            # cv2.imshow('Traductor LSP', image)
+            # cv2.waitKey(10)
             
         video.release()
         cv2.destroyAllWindows()
@@ -72,7 +72,7 @@ def evaluate_model(video_path, threshold=0.7):
     
 
 if __name__ == "__main__":
-    video_path = r"E:\Data\LSP Project\RED NEURONAL\tmp\VID_2024-03-17_01-51-31-529355598.mp4"
+    video_path = r"E:\Data\LSP Project\RED NEURONAL\tmp\VID_2024-03-17_10-07-471031717552.mp4"
     video_path = process_video(video_path, 12)
     resp = evaluate_model(video_path)
     print(resp)

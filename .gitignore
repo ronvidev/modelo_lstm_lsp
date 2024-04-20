@@ -1,6 +1,7 @@
 .vscode
 .test
+.old
 __pycache__
-
+tmp
 # samples
 frame_actions
