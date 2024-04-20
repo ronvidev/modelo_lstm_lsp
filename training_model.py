@@ -1,6 +1,4 @@
 import os
-os.environ['TF_ENABLE_ONEDNN_OPTS'] = '0'
-
 import numpy as np
 from model import NUM_EPOCH, get_model
 from keras.preprocessing.sequence import pad_sequences
@@ -9,8 +7,7 @@ from helpers import get_actions, get_sequences_and_labels
 from constants import MAX_LENGTH_FRAMES, MODEL_NAME
 
 def training_model(data_path, model_path):
-    actions = get_actions(data_path)
-    # ['word1', 'word2', 'word3]
+    actions = get_actions(data_path) # ['word1', 'word2', 'word3]
     
     sequences, labels = get_sequences_and_labels(actions, data_path)
     
