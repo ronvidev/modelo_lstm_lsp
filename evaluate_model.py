@@ -2,7 +2,7 @@ import os
 import cv2
 import numpy as np
 from mediapipe.python.solutions.holistic import Holistic
-from keras.models import load_model
+from tensorflow.keras.models import load_model
 from helpers import draw_keypoints, extract_keypoints, format_sentences, get_actions, mediapipe_detection, save_txt, there_hand
 from text_to_speech import text_to_speech
 from constants import DATA_PATH, FONT, FONT_POS, FONT_SIZE, MAX_LENGTH_FRAMES, MIN_LENGTH_FRAMES, MODELS_PATH, MODEL_NAME, ROOT_PATH
@@ -14,7 +14,7 @@ def evaluate_model(model, threshold=0.7):
     actions = get_actions(DATA_PATH)
     
     with Holistic() as holistic_model:
-        video = cv2.VideoCapture(1)
+        video = cv2.VideoCapture(0)
         
         while video.isOpened():
             _, frame = video.read()
@@ -40,7 +40,6 @@ def evaluate_model(model, threshold=0.7):
             
             cv2.rectangle(image, (0,0), (640, 35), (245, 117, 16), -1)
             cv2.putText(image, ' | '.join(sentence), FONT_POS, FONT, FONT_SIZE, (255, 255, 255))
-            save_txt('outputs/sentences.txt', '\n'.join(sentence))
             
             draw_keypoints(image, results)
             cv2.imshow('Traductor LSP', image)

@@ -1,8 +1,8 @@
 import os
 import numpy as np
 from model import NUM_EPOCH, get_model
-from keras.preprocessing.sequence import pad_sequences
-from keras.utils import to_categorical
+from tensorflow.keras.preprocessing.sequence import pad_sequences
+from tensorflow.keras.utils import to_categorical
 from helpers import get_actions, get_sequences_and_labels
 from constants import MAX_LENGTH_FRAMES, MODEL_NAME
 
