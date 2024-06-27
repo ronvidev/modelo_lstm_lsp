@@ -44,9 +44,9 @@ def capture_samples(path, margin_frame=2, min_cant_frames=5, video_device=0):
     create_folder(path)
 
     cant_sample_exist = len(os.listdir(path))
+    quantity_sample = cant_sample_exist
     new_sample_requested = False
     capturing = True
-    count_sample = 0
     count_frame = 0
     frames = []
 
@@ -72,27 +72,31 @@ def capture_samples(path, margin_frame=2, min_cant_frames=5, video_device=0):
                     frames.append(np.asarray(frame))
             else:
                 if len(frames) > min_cant_frames + margin_frame:
+                    quantity_sample +=1
                     frames = frames[:-margin_frame]
-                    output_folder = os.path.join(path, f"sample_{cant_sample_exist + count_sample + 1}")
+                    output_folder = os.path.join(path, f"sample_{quantity_sample}")
                     create_folder(output_folder)
                     save_frames(frames, output_folder)
-                    count_sample += 1
 
                 frames = []
                 count_frame = 0
                 cv2.putText(image, 'Listo para capturar...', FONT_POS, FONT, FONT_SIZE, RED_COLOR, 3)
-                cv2.putText(image, f'Muestra numero: {count_sample}', (10, 100), FONT, FONT_SIZE, RED_COLOR, 3)
+                cv2.putText(image, f'Muestra numero: {quantity_sample}', (10, 100), FONT, FONT_SIZE, RED_COLOR, 3)
 
             draw_keypoints(image, results)
             cv2.imshow(f'Toma de muestras para "{os.path.basename(path)}"', image)
-            bring_window_to_front(window_name) 
+            bring_window_to_front(window_name)
 
             key = cv2.waitKey(10) & 0xFF
-            if key == ord('q'):
+            if key == 27:
                 break
+            elif key == ord('q'):
+                video.release()
+                cv2.destroyAllWindows()
+                exit()
             elif key == ord(' '):
                 capturing = not capturing
-            elif key == ord('s'):
+            elif key == 13:
                 new_sample_requested = True
                 break
 
