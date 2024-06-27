@@ -1,0 +1,10 @@
+gTTS==2.5.1
+keras==2.10.0
+mediapipe==0.10.11
+numpy==2.0.0
+opencv_contrib_python==4.10.0.84
+opencv_python==4.10.0.84
+pandas==2.2.2
+pygame==2.5.2
+PyGetWindow==0.0.9
+tensorflow==2.10.1

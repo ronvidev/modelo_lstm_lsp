@@ -2,6 +2,10 @@ Este es un modelo de una red neuronal que traduce Lengua de Señas Peruana (LSP)
 
 ## SCRIPTS PRINCIPALES
 - capture_samples.py → captura las muestras y las ubica en la carpeta frame_actions.
+    - Controles:
+        - 'q' para salir y eliminar la muestra actual.
+        - 's' para terminar el registro de la muestra actual y comenzar una nueva.
+        - ' ' (espacio) para pausar y reanudar la captura.
 - create_keypoints.py → crea los keypoints que se usarán en el entrenamiento.
 - training_model.py → entrena la red neuronal.
 - evaluate_model.py → donde se realiza la prueba de la red neuronal.
