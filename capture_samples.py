@@ -22,7 +22,7 @@ def bring_window_to_front(window_name):
         window.activate()
     except IndexError:
         print(f"No se encontró la ventana con el nombre: {window_name}")
-    except gw.PyGetWindowException as e:
+    except gw.PyGetWindowException:
         pass
 
 
@@ -107,6 +107,7 @@ def capture_samples(path, margin_frame=2, min_cant_frames=5, video_device=0):
 
     return new_sample_requested
 
+
 def main():
     while True:
         sample_label = input('Ingresa la etiqueta de la muestra: ')
@@ -119,6 +120,7 @@ def main():
             handle_action(shutil.rmtree, sample_path)
         else:
             break
+
 
 if __name__ == "__main__":
     main()
