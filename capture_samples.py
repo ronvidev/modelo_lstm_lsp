@@ -37,9 +37,10 @@ def capture_samples(path, margin_frame=2, min_cant_frames=5, video_device=0):
     - video_device (int): Dispositivo de video a usar (default es 0 para webcam).
 
     Controles:
-    - 'q' para salir y eliminar la muestra actual.
-    - 's' para terminar el registro de la muestra actual y comenzar una nueva.
+    - 'Esc' para salir y eliminar la muestra actual.
+    - 'Enter' para terminar el registro de la muestra actual y comenzar una nueva.
     - ' ' (espacio) para pausar y reanudar la captura.
+    - 'q' para salir y cerrar el programa.
     """
     create_folder(path)
 
