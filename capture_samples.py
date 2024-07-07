@@ -25,13 +25,15 @@ def capture_samples(path, margin_frame=2, min_cant_frames=5):
         video = cv2.VideoCapture(0)
         
         while video.isOpened():
-            _, frame = video.read()
-            image, results = mediapipe_detection(frame, holistic_model)
+            ret, frame = video.read()
+            if not ret: break
+            
+            results = mediapipe_detection(frame, holistic_model)
             
             if there_hand(results):
                 count_frame += 1
                 if count_frame > margin_frame: 
-                    cv2.putText(image, 'Capturando...', FONT_POS, FONT, FONT_SIZE, (255, 50, 0))
+                    cv2.putText(frame, 'Capturando...', FONT_POS, FONT, FONT_SIZE, (255, 50, 0))
                     frames.append(np.asarray(frame))
                 
             else:
@@ -44,10 +46,10 @@ def capture_samples(path, margin_frame=2, min_cant_frames=5):
                 
                 frames = []
                 count_frame = 0
-                cv2.putText(image, 'Listo para capturar...', FONT_POS, FONT, FONT_SIZE, (0,220, 100))
+                cv2.putText(frame, 'Listo para capturar...', FONT_POS, FONT, FONT_SIZE, (0,220, 100))
                 
-            draw_keypoints(image, results)
-            cv2.imshow(f'Toma de muestras para "{os.path.basename(path)}"', image)
+            draw_keypoints(frame, results)
+            cv2.imshow(f'Toma de muestras para "{os.path.basename(path)}"', frame)
             if cv2.waitKey(10) & 0xFF == ord('q'):
                 break
 
