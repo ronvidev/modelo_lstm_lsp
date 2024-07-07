@@ -18,30 +18,6 @@ def hello():
     return 'Servidor encendido'
 
 
-@app.route('/receive_frame', methods=['POST'])
-def receive_frame():
-    try:
-        # Obtener los datos binarios de la imagen enviada desde Flutter
-        frame_data = request.data
-        
-        imagen = Image.frombytes('L', (1280, 720), frame_data)
-        frame_np = np.array(imagen)
-        frame = cv2.cvtColor(frame_np, cv2.COLOR_BAYER_BG2BGR)
-        
-        
-        
-        # # Guardar el frame como un archivo en la carpeta de frames
-        filename = os.path.join(os.getcwd(), f"frames_tmp/frame_{request.headers['Frame-Number']}.jpg")
-        cv2.imwrite(filename, frame)
-
-        # En este ejemplo, simplemente devolvemos un mensaje de éxito
-        return 'Frame recibido correctamente', 200
-    except Exception as e:
-        print(str(e))
-        # Manejar cualquier error que pueda ocurrir durante el proceso
-        return str(e), 500
-
-
 @app.route('/upload_video', methods=['POST'])
 def upload_video():
     video_file = request.files['video']
