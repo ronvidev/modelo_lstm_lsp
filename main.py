@@ -34,10 +34,10 @@ class VideoRecorder(QMainWindow):
         self.holistic_model = Holistic()
         self.kp_sequence, self.sentence = [], []
         self.count_frame = 0
-        self.model = load_model(os.path.join(MODELS_PATH, MODEL_NAME))
+        self.models = [load_model(model_path) for model_path in MODELS_PATH]
     
     def update_frame(self):
-        actions = get_actions(DATA_PATH)
+        word_ids = get_word_ids(KEYPOINTS_PATH)
         ret, frame = self.capture.read()
         if not ret: return
         
@@ -45,19 +45,34 @@ class VideoRecorder(QMainWindow):
         
         if self.is_recording:
             results = mediapipe_detection(frame, self.holistic_model)
-            self.kp_sequence.append(extract_keypoints(results))
             
-            if len(self.kp_sequence) > MAX_LENGTH_FRAMES and there_hand(results):
+            if there_hand(results):
+                self.kp_sequence.append(extract_keypoints(results))
                 self.count_frame += 1
                 
             elif self.count_frame >= MIN_LENGTH_FRAMES:
-                last_frames = self.kp_sequence[-MAX_LENGTH_FRAMES:]
-                res = self.model.predict(np.expand_dims(last_frames, axis=0))[0]
-
+                if self.count_frame <= 7:
+                    print("carga modelo 7")
+                    self.kp_sequence = pad_secuences(self.kp_sequence, 7)
+                    model = self.models[0]
+                    
+                elif self.count_frame <= 12:
+                    print("carga modelo 12")
+                    self.kp_sequence = pad_secuences(self.kp_sequence, 12)
+                    model = self.models[1]
+             
+                else:
+                    print("carga modelo 18")
+                    self.kp_sequence = pad_secuences(self.kp_sequence, 18)
+                    model = self.models[2]
+                
+                res = model.predict(np.expand_dims(self.kp_sequence, axis=0))[0]
+                
                 if res[np.argmax(res)] > 0.7:
-                    sent = actions[np.argmax(res)]
+                    print(res[np.argmax(res)])
+                    sent = word_ids[np.argmax(res)].replace('_', ' ').split('-')[0].upper()
                     self.sentence.insert(0, sent)
-                    text_to_speech(sent)
+                    text_to_speech(sent) # ONLY LOCAL (NO SERVER)
                     
                 self.count_frame = 0
                 self.kp_sequence = []

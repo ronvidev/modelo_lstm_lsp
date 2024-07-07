@@ -25,16 +25,17 @@ def capture_samples(path, margin_frame=2, min_cant_frames=5):
         video = cv2.VideoCapture(0)
         
         while video.isOpened():
-            ret, image = video.read()
+            ret, frame = video.read()
+            image = frame.copy()
             if not ret: break
             
-            results = mediapipe_detection(image, holistic_model)
+            results = mediapipe_detection(frame, holistic_model)
             
             if there_hand(results):
                 count_frame += 1
-                if count_frame > margin_frame: 
+                if count_frame > margin_frame:
                     cv2.putText(image, 'Capturando...', FONT_POS, FONT, FONT_SIZE, (255, 50, 0))
-                    frames.append(np.asarray(image))
+                    frames.append(np.asarray(frame))
                 
             else:
                 if len(frames) > min_cant_frames + margin_frame:
@@ -57,6 +58,6 @@ def capture_samples(path, margin_frame=2, min_cant_frames=5):
         cv2.destroyAllWindows()
 
 if __name__ == "__main__":
-    word_name = "word"
+    word_name = "buenas tardes"
     word_path = os.path.join(ROOT_PATH, FRAME_ACTIONS_PATH, word_name)
     capture_samples(word_path)
