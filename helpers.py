@@ -10,10 +10,8 @@ from typing import NamedTuple
 def mediapipe_detection(image, model):
     image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
     image.flags.writeable = False
-    results = model.process(image) 
-    image.flags.writeable = True
-    image = cv2.cvtColor(image, cv2.COLOR_RGB2BGR)
-    return image, results
+    results = model.process(image)
+    return results
 
 def create_folder(path):
     '''
@@ -35,10 +33,6 @@ def get_actions(path):
     return out
 
 # CAPTURE SAMPLES
-def configurar_resolucion(camara):
-    camara.set(cv2.CAP_PROP_FRAME_WIDTH, 1280)
-    camara.set(cv2.CAP_PROP_FRAME_HEIGHT, 720)
-
 def draw_keypoints(image, results):
     '''
     Dibuja los keypoints en la imagen
@@ -126,18 +120,3 @@ def get_sequences_and_labels(actions, data_path):
             labels.append(label)
             
     return sequences, labels
-
-# EVALUATION
-def save_txt(file_name, content):
-    with open(file_name, 'w') as archivo:
-        archivo.write(content)
-
-def format_sentences(sent, sentence, repe_sent):
-    if len(sentence) > 1:
-        if sent in sentence[1]:
-            repe_sent += 1
-            sentence.pop(0)
-            sentence[0] = f"{sent} (x{repe_sent})"
-        else:
-            repe_sent = 1
-    return sentence, repe_sent
