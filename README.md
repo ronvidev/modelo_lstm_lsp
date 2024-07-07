@@ -5,6 +5,7 @@ Este es un modelo de una red neuronal que traduce Lengua de Señas Peruana (LSP)
 - create_keypoints.py → crea los keypoints que se usarán en el entrenamiento.
 - training_model.py → entrena la red neuronal.
 - evaluate_model.py → donde se realiza la prueba de la red neuronal.
+- main.py → donde se utiliza una GUI para usar el traductor.
 
 ## SCRIPTS SECUNDARIOS
 - model.py → aquí se ajusta el modelo de la red neuronal.
@@ -18,7 +19,7 @@ Este es un modelo de una red neuronal que traduce Lengua de Señas Peruana (LSP)
 4. Realizar pruebas con evaluate_model.py
 
 ## Observaciones
-La información que está en Data puede que no funcione para versiones diferentes de Python a la que usé en el video (3.11.3). Así que se recomienda volver a generar los keypoints.
+La información que está en Data puede que no funcione para versiones diferentes de Python a la que usé en el video (3.10.0). Así que se recomienda volver a generar los keypoints para una versión diferente.
 
 ## Video de la explicación del código:
 https://youtu.be/3EK0TxfoAMk 
