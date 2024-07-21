@@ -7,11 +7,6 @@ from constants import FONT, FONT_POS, FONT_SIZE, FRAME_ACTIONS_PATH, ROOT_PATH
 from datetime import datetime
 
 
-def process_detection(results, count_frame, margin_frame):
-    """Procesa la detección de manos y captura frames si se detectan."""
-    
-    return False, count_frame
-
 def capture_samples(path, margin_frame=2, min_cant_frames=5, delay_frames=5):
     '''
     ### CAPTURA DE MUESTRAS PARA UNA PALABRA
