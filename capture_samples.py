@@ -7,7 +7,7 @@ from constants import FONT, FONT_POS, FONT_SIZE, FRAME_ACTIONS_PATH, ROOT_PATH
 from datetime import datetime
 
 
-def capture_samples(path, margin_frame=2, min_cant_frames=5, delay_frames=5):
+def capture_samples(path, margin_frame=2, min_cant_frames=5, delay_frames=3):
     '''
     ### CAPTURA DE MUESTRAS PARA UNA PALABRA
     Recibe como parámetro la ubicación de guardado y guarda los frames
@@ -47,7 +47,7 @@ def capture_samples(path, margin_frame=2, min_cant_frames=5, delay_frames=5):
                     if fix_frames < delay_frames:
                         recording = True
                         continue
-                    frames = frames[:-margin_frame]
+                    frames = frames[: - (margin_frame + delay_frames)]
                     today = datetime.now().strftime('%y%m%d%H%M%S%f')
                     output_folder = os.path.join(path, f"sample_{today}")
                     create_folder(output_folder)
@@ -66,6 +66,6 @@ def capture_samples(path, margin_frame=2, min_cant_frames=5, delay_frames=5):
         cv2.destroyAllWindows()
 
 if __name__ == "__main__":
-    word_name = "como_estas_test"
+    word_name = "hola-der"
     word_path = os.path.join(ROOT_PATH, FRAME_ACTIONS_PATH, word_name)
     capture_samples(word_path)
