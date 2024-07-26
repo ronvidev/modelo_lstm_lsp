@@ -7,7 +7,7 @@ from constants import FONT, FONT_POS, FONT_SIZE, FRAME_ACTIONS_PATH, ROOT_PATH
 from datetime import datetime
 
 
-def capture_samples(path, margin_frame=2, min_cant_frames=5, delay_frames=3):
+def capture_samples(path, margin_frame=1, min_cant_frames=5, delay_frames=3):
     '''
     ### CAPTURA DE MUESTRAS PARA UNA PALABRA
     Recibe como parámetro la ubicación de guardado y guarda los frames
@@ -66,6 +66,6 @@ def capture_samples(path, margin_frame=2, min_cant_frames=5, delay_frames=3):
         cv2.destroyAllWindows()
 
 if __name__ == "__main__":
-    word_name = "hola-der"
+    word_name = "por_favor"
     word_path = os.path.join(ROOT_PATH, FRAME_ACTIONS_PATH, word_name)
     capture_samples(word_path)

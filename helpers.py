@@ -83,52 +83,51 @@ def extract_keypoints(results):
     rh = np.array([[res.x, res.y, res.z] for res in results.right_hand_landmarks.landmark]).flatten() if results.right_hand_landmarks else np.zeros(21*3)
     return np.concatenate([pose, face, lh, rh])
 
-def get_keypoints(model, path):
+def get_keypoints(model, sample_path):
     '''
     ### OBTENER KEYPOINTS DE LA MUESTRA
     Retorna la secuencia de keypoints de la muestra
     '''
     kp_seq = np.array([])
-    for img_name in os.listdir(path):
-        img_path = os.path.join(path, img_name)
+    for img_name in os.listdir(sample_path):
+        img_path = os.path.join(sample_path, img_name)
         frame = cv2.imread(img_path)
         results = mediapipe_detection(frame, model)
         kp_frame = extract_keypoints(results)
         kp_seq = np.concatenate([kp_seq, [kp_frame]] if kp_seq.size > 0 else [[kp_frame]])
     return kp_seq
 
-def insert_keypoints_sequence(df, n_sample:int, model_num:str, kp_seq):
+def insert_keypoints_sequence(df, n_sample:int, kp_seq):
     '''
     ### INSERTA LOS KEYPOINTS DE LA MUESTRA AL DATAFRAME
     Retorna el mismo DataFrame pero con los keypoints de la muestra agregados
     '''
     for frame, keypoints in enumerate(kp_seq):
-        data = {'sample': n_sample, 'model_num': model_num, 'frame': frame + 1, 'keypoints': [keypoints]}
+        data = {'sample': n_sample, 'frame': frame + 1, 'keypoints': [keypoints]}
         df_keypoints = pd.DataFrame(data)
         df = pd.concat([df, df_keypoints])
     
     return df
 
 # TRAINING MODEL
-def get_sequences_and_labels(words_id, model_num:int):
+def get_sequences_and_labels(words_id):
     sequences, labels = [], []
     
     for word_index, word_id in enumerate(words_id):
         hdf_path = os.path.join(KEYPOINTS_PATH, f"{word_id}.h5")
         data = pd.read_hdf(hdf_path, key='data')
-        for num, df_by_model_num in data.groupby('model_num'):
-            if model_num == int(num):
-                for _, df_sample in df_by_model_num.groupby('sample'):
-                    seq_keypoints = [fila['keypoints'] for _, fila in df_sample.iterrows()]
-                    sequences.append(seq_keypoints)
-                    labels.append(word_index)
+        for _, df_sample in data.groupby('sample'):
+            seq_keypoints = [fila['keypoints'] for _, fila in df_sample.iterrows()]
+            sequences.append(seq_keypoints)
+            labels.append(word_index)
                     
     return sequences, labels
 
+
 # EVALUATE
 def pad_secuences(lista_A, max_longitud):
-  list_0 = lista_A[0]
-  for _ in range(len(lista_A), max_longitud):
-    lista_A.insert(0, [0] * len(list_0))
+    list_0 = lista_A[0]
+    for _ in range(len(lista_A), max_longitud):
+        lista_A.insert(0, [0] * len(list_0))
 
-  return lista_A[-max_longitud:]
+    return lista_A[-max_longitud-2:-2]

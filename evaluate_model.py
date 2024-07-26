@@ -8,11 +8,11 @@ from constants import *
 from text_to_speech import text_to_speech
 
 
-def evaluate_model(src=None, threshold=0.6):
+def evaluate_model(src=None, threshold=0.4):
     count_frame = 0
     kp_sequence, sentence = [], []
     word_ids = get_word_ids(KEYPOINTS_PATH)
-    models = [load_model(model_path) for model_path in MODELS_PATH]
+    model = load_model(MODEL_PATH)
     
     with Holistic() as holistic_model:
         video = cv2.VideoCapture(src or 0)
@@ -27,27 +27,14 @@ def evaluate_model(src=None, threshold=0.6):
                 kp_sequence.append(extract_keypoints(results))
                 count_frame += 1
             
-            elif count_frame >= MIN_LENGTH_FRAMES:
-                if count_frame <= 7:
-                    print("carga modelo 7")
-                    kp_sequence = pad_secuences(kp_sequence, 7)
-                    model = models[0]
-                    
-                elif count_frame <= 12:
-                    print("carga modelo 12")
-                    kp_sequence = pad_secuences(kp_sequence, 12)
-                    model = models[1]
-             
-                else:
-                    print("carga modelo 18")
-                    kp_sequence = pad_secuences(kp_sequence, 18)
-                    model = models[2]
-                
+            elif count_frame >= MIN_LENGTH_FRAMES + 4:
+                kp_sequence = pad_secuences(kp_sequence, int(MODEL_FRAMES))
                 res = model.predict(np.expand_dims(kp_sequence, axis=0))[0]
                 
+                # print(res[np.argmax(res)])
                 if res[np.argmax(res)] > threshold:
-                    print(res[np.argmax(res)])
-                    sent = word_ids[np.argmax(res)].split('-')[0]
+                    word_id = word_ids[np.argmax(res)].split('-')[0]
+                    sent = words_text.get(word_id)
                     sentence.insert(0, sent)
                     text_to_speech(sent) # ONLY LOCAL (NO SERVER)
                     

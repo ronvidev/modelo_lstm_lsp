@@ -34,7 +34,7 @@ class VideoRecorder(QMainWindow):
         self.holistic_model = Holistic()
         self.kp_sequence, self.sentence = [], []
         self.count_frame = 0
-        self.models = [load_model(model_path) for model_path in MODELS_PATH]
+        self.model = load_model(MODEL_PATH)
     
     def update_frame(self):
         word_ids = get_word_ids(KEYPOINTS_PATH)
@@ -46,27 +46,16 @@ class VideoRecorder(QMainWindow):
         if self.is_recording:
             results = mediapipe_detection(frame, self.holistic_model)
             
+            # TODO: colocar un máximo de frames para cada seña,
+            # es decir, que traduzca incluso cuando hay mano si s llega a ese máximo.
             if there_hand(results):
                 self.kp_sequence.append(extract_keypoints(results))
                 self.count_frame += 1
                 
             elif self.count_frame >= MIN_LENGTH_FRAMES:
-                if self.count_frame <= 7:
-                    print("carga modelo 7")
-                    self.kp_sequence = pad_secuences(self.kp_sequence, 7)
-                    model = self.models[0]
-                    
-                elif self.count_frame <= 12:
-                    print("carga modelo 12")
-                    self.kp_sequence = pad_secuences(self.kp_sequence, 12)
-                    model = self.models[1]
-             
-                else:
-                    print("carga modelo 18")
-                    self.kp_sequence = pad_secuences(self.kp_sequence, 18)
-                    model = self.models[2]
-                
-                res = model.predict(np.expand_dims(self.kp_sequence, axis=0))[0]
+                # TODO: normalizar los frames a MODEL_FRAMES
+                # self.kp_sequence = pad_secuences(self.kp_sequence, int(MODEL_FRAMES))
+                res = self.model.predict(np.expand_dims(self.kp_sequence, axis=0))[0]
                 
                 if res[np.argmax(res)] > 0.7:
                     print(res[np.argmax(res)])
