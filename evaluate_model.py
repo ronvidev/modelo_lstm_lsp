@@ -34,6 +34,7 @@ def evaluate_model(src=None, threshold=0.4):
                 # print(res[np.argmax(res)])
                 if res[np.argmax(res)] > threshold:
                     word_id = word_ids[np.argmax(res)].split('-')[0]
+                    
                     sent = words_text.get(word_id)
                     sentence.insert(0, sent)
                     text_to_speech(sent) # ONLY LOCAL (NO SERVER)

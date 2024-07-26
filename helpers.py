@@ -130,4 +130,4 @@ def pad_secuences(lista_A, max_longitud):
     for _ in range(len(lista_A), max_longitud):
         lista_A.insert(0, [0] * len(list_0))
 
-    return lista_A[-max_longitud-2:-2]
+    return lista_A[-max_longitud:]

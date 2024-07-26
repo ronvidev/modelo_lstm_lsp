@@ -21,10 +21,17 @@ FONT_SIZE = 1.5
 FONT_POS = (5, 30)
 
 words_text = {
-    "adios": "ADIOS",
+    "adios": "ADIÓS",
     "bien": "BIEN",
     "buenas_noches": "BUENAS NOCHES",
     "buenas_tardes": "BUENAS TARDES",
-    "hola-der": "HOLA",
-    "hola-izq": "HOLA",
+    "buenas_dias": "BUENOS DÍAS",
+    "como_estas": "COMO ESTÁS",
+    "disculpa": "DISCULPA",
+    "gracias": "GRACIAS",
+    "hola": "HOLA",
+    "mal": "MAL",
+    "mas_o_menos": "MAS O MENOS",
+    "me_ayudas": "ME AYUDAS",
+    "por_favor": "POR FAVOR",
 }
