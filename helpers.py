@@ -122,12 +122,3 @@ def get_sequences_and_labels(words_id):
             labels.append(word_index)
                     
     return sequences, labels
-
-
-# EVALUATE
-def pad_secuences(lista_A, max_longitud):
-    list_0 = lista_A[0]
-    for _ in range(len(lista_A), max_longitud):
-        lista_A.insert(0, [0] * len(list_0))
-
-    return lista_A[-max_longitud:]

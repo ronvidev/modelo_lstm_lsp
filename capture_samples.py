@@ -42,7 +42,7 @@ def capture_samples(path, margin_frame=1, min_cant_frames=5, delay_frames=3):
                     cv2.putText(image, 'Capturando...', FONT_POS, FONT, FONT_SIZE, (255, 50, 0))
                     frames.append(np.asarray(frame))
             else:
-                if len(frames) > min_cant_frames + margin_frame:
+                if len(frames) >= min_cant_frames + margin_frame:
                     fix_frames += 1
                     if fix_frames < delay_frames:
                         recording = True

@@ -25,7 +25,7 @@ words_text = {
     "bien": "BIEN",
     "buenas_noches": "BUENAS NOCHES",
     "buenas_tardes": "BUENAS TARDES",
-    "buenas_dias": "BUENOS DÍAS",
+    "buenos_dias": "BUENOS DÍAS",
     "como_estas": "COMO ESTÁS",
     "disculpa": "DISCULPA",
     "gracias": "GRACIAS",
