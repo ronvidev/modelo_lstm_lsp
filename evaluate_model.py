@@ -38,7 +38,7 @@ def normalize_keypoints(keypoints, target_length=15):
     else:
         return keypoints
     
-def evaluate_model(src=None, threshold=0.8, margin_frame=2, delay_frames=3):
+def evaluate_model(src=None, threshold=0.8, margin_frame=1, delay_frames=3):
     kp_seq, sentence = [], []
     word_ids = get_word_ids(KEYPOINTS_PATH)
     model = load_model(MODEL_PATH)

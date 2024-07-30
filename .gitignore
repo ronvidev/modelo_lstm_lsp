@@ -4,6 +4,6 @@ __pycache__
 tmp
 # samples
 frame_actions
-data/keypoints
+data
 videos
 .old

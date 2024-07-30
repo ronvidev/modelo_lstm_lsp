@@ -50,7 +50,7 @@ def process_directory(word_directory, target_frame_count=15):
 
 def save_normalized_frames(directory, frames):
     for i, frame in enumerate(frames, start=1):
-        cv2.imwrite(os.path.join(directory, f'frame_{i:02}.png'), frame)
+        cv2.imwrite(os.path.join(directory, f'frame_{i:02}.jpg'), frame, [cv2.IMWRITE_JPEG_QUALITY, 50])
 
 def clear_directory(directory):
     for filename in os.listdir(directory):
@@ -65,10 +65,16 @@ if __name__ == "__main__":
     word_ids = [word for word in os.listdir(os.path.join(ROOT_PATH, FRAME_ACTIONS_PATH))]
     
     # GENERAR PARA UNA PALABRA O CONJUNTO
-    # word_ids = ["buenas tardes"]
+    # word_ids = ["buenos_dias"]
     
     for word_id in word_ids:
         word_path = os.path.join(FRAME_ACTIONS_PATH, word_id)
         if os.path.isdir(word_path):
             print(f'Normalizando frames para "{word_id}"...')
             process_directory(word_path, MODEL_FRAMES)
+    
+    # sample_directory = r"E:\Data\LSP Project\RED NEURONAL\frame_actions\buenos_dias\sample_240113195007489206"
+    # frames = read_frames_from_directory(sample_directory)
+    # normalized_frames = normalize_frames(frames, 15)
+    # clear_directory(sample_directory)
+    # save_normalized_frames(sample_directory, normalized_frames)

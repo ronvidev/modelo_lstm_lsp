@@ -35,6 +35,7 @@ if __name__ == "__main__":
     word_ids = [word for word in os.listdir(os.path.join(ROOT_PATH, FRAME_ACTIONS_PATH))]
     
     # GENERAR PARA UNA PALABRA O CONJUNTO
+    # word_ids = ["bien"]
     # word_ids = ["buenos_dias", "como_estas", "disculpa", "gracias", "hola-der", "hola-izq", "mal", "mas_o_menos", "me_ayudas", "por_favor"]
     
     for word_id in word_ids:
