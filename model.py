@@ -6,7 +6,7 @@ from constants import LENGTH_KEYPOINTS
 def get_model(max_length_frames, output_length: int):
     model = Sequential()
     
-    model.add(LSTM(128, return_sequences=True, input_shape=(max_length_frames, LENGTH_KEYPOINTS), kernel_regularizer=l2(0.01)))
+    model.add(LSTM(64, return_sequences=True, input_shape=(max_length_frames, LENGTH_KEYPOINTS), kernel_regularizer=l2(0.01)))
     model.add(Dropout(0.5))
 
     # Segunda capa LSTM con regularización L2
