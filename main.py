@@ -8,6 +8,7 @@ from PyQt5.uic import loadUi
 import numpy as np
 from keras.models import load_model
 from mediapipe.python.solutions.holistic import Holistic
+from evaluate_model import normalize_keypoints
 from helpers import *
 from constants import *
 from text_to_speech import text_to_speech
@@ -18,13 +19,12 @@ class VideoRecorder(QMainWindow):
         super().__init__()
         loadUi('mainwindow.ui', self)
         
-        self.is_recording = False
         self.capture = cv2.VideoCapture(0)
         
         self.init_lsp()
         
-        self.btn_start.clicked.connect(self.start_recording)
-        self.btn_stop.clicked.connect(self.stop_recording)
+        # self.btn_start.clicked.connect(self.start_recording)
+        # self.btn_stop.clicked.connect(self.stop_recording)
         
         self.timer = QTimer(self)
         self.timer.timeout.connect(self.update_frame)
@@ -32,9 +32,13 @@ class VideoRecorder(QMainWindow):
     
     def init_lsp(self):
         self.holistic_model = Holistic()
-        self.kp_sequence, self.sentence = [], []
+        self.kp_seq, self.sentence = [], []
         self.count_frame = 0
+        self.fix_frames = 0
+        self.margin_frame = 1
+        self.delay_frames = 3
         self.model = load_model(MODEL_PATH)
+        self.recording = False
     
     def update_frame(self):
         word_ids = get_word_ids(KEYPOINTS_PATH)
@@ -43,31 +47,38 @@ class VideoRecorder(QMainWindow):
         
         image = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
         
-        if self.is_recording:
-            results = mediapipe_detection(frame, self.holistic_model)
+        results = mediapipe_detection(frame, self.holistic_model)
+        
+        if there_hand(results) or self.recording:
+            self.recording = False
+            self.count_frame += 1
+            if self.count_frame > self.margin_frame:
+                self.kp_seq.append(extract_keypoints(results))
             
-            # TODO: colocar un máximo de frames para cada seña,
-            # es decir, que traduzca incluso cuando hay mano si s llega a ese máximo.
-            if there_hand(results):
-                self.kp_sequence.append(extract_keypoints(results))
-                self.count_frame += 1
+        else:
+            if self.count_frame >= MIN_LENGTH_FRAMES + self.margin_frame:
+                self.fix_frames += 1
+                if self.fix_frames < self.delay_frames:
+                    self.recording = True
+                    return
                 
-            elif self.count_frame >= MIN_LENGTH_FRAMES:
-                # TODO: normalizar los frames a MODEL_FRAMES
-                # self.kp_sequence = pad_secuences(self.kp_sequence, int(MODEL_FRAMES))
-                res = self.model.predict(np.expand_dims(self.kp_sequence, axis=0))[0]
+                self.kp_seq = self.kp_seq[: - (self.margin_frame + self.delay_frames)]
+                kp_normalized = normalize_keypoints(self.kp_seq, int(MODEL_FRAMES))
+                res = self.model.predict(np.expand_dims(kp_normalized, axis=0))[0]
                 
                 if res[np.argmax(res)] > 0.7:
-                    print(res[np.argmax(res)])
-                    sent = word_ids[np.argmax(res)].replace('_', ' ').split('-')[0].upper()
+                    word_id = word_ids[np.argmax(res)].split('-')[0]
+                    sent = words_text.get(word_id)
                     self.sentence.insert(0, sent)
                     text_to_speech(sent) # ONLY LOCAL (NO SERVER)
-                    
-                self.count_frame = 0
-                self.kp_sequence = []
             
-            self.lbl_output.setText(", ".join(self.sentence))
-            draw_keypoints(image, results)
+            self.recording = False
+            self.fix_frames = 0
+            self.count_frame = 0
+            self.kp_seq = []
+        
+        self.lbl_output.setText(" - ".join(self.sentence))
+        draw_keypoints(image, results)
         
         height, width, channel = image.shape
         step = channel * width
@@ -77,19 +88,19 @@ class VideoRecorder(QMainWindow):
         
         self.lbl_video.setPixmap(QPixmap.fromImage(scaled_qImg))
 
-    def start_recording(self):
-        if not self.is_recording:
-            self.is_recording = True
-            # self.video_writer = cv2.VideoWriter("output.mp4", cv2.VideoWriter_fourcc(*'mp4v'), 30, (640, 480))
-            self.btn_start.setEnabled(False)
-            self.btn_stop.setEnabled(True)
+    # def start_recording(self):
+    #     if not self.recording:
+    #         self.recording = True
+    #         # self.video_writer = cv2.VideoWriter("output.mp4", cv2.VideoWriter_fourcc(*'mp4v'), 30, (640, 480))
+    #         self.btn_start.setEnabled(False)
+    #         self.btn_stop.setEnabled(True)
     
-    def stop_recording(self):
-        if self.is_recording:
-            self.is_recording = False
-            # self.video_writer.release()
-            self.btn_start.setEnabled(True)
-            self.btn_stop.setEnabled(False)
+    # def stop_recording(self):
+    #     if self.recording:
+    #         self.recording = False
+    #         # self.video_writer.release()
+    #         self.btn_start.setEnabled(True)
+    #         self.btn_stop.setEnabled(False)
     
     def closeEvent(self, event):
         self.capture.release()

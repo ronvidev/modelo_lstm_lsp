@@ -55,6 +55,8 @@ def evaluate_model(src=None, threshold=0.8, margin_frame=1, delay_frames=3):
 
             results = mediapipe_detection(frame, holistic_model)
             
+            # TODO: colocar un máximo de frames para cada seña,
+            # es decir, que traduzca incluso cuando hay mano si se llega a ese máximo.
             if there_hand(results) or recording:
                 recording = False
                 count_frame += 1
@@ -69,8 +71,8 @@ def evaluate_model(src=None, threshold=0.8, margin_frame=1, delay_frames=3):
                         recording = True
                         continue
                     kp_seq = kp_seq[: - (margin_frame + delay_frames)]
-                    normalized_keypoints = normalize_keypoints(kp_seq, int(MODEL_FRAMES))
-                    res = model.predict(np.expand_dims(normalized_keypoints, axis=0))[0]
+                    kp_normalized = normalize_keypoints(kp_seq, int(MODEL_FRAMES))
+                    res = model.predict(np.expand_dims(kp_normalized, axis=0))[0]
                     
                     print(np.argmax(res), f"({res[np.argmax(res)] * 100:.2f}%)")
                     if res[np.argmax(res)] > threshold:
@@ -80,7 +82,8 @@ def evaluate_model(src=None, threshold=0.8, margin_frame=1, delay_frames=3):
                         sentence.insert(0, sent)
                         text_to_speech(sent) # ONLY LOCAL (NO SERVER)
                 
-                recording, fix_frames = False, 0
+                recording = False
+                fix_frames = 0
                 count_frame = 0
                 kp_seq = []
             
