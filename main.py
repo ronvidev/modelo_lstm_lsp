@@ -41,7 +41,7 @@ class VideoRecorder(QMainWindow):
         self.recording = False
     
     def update_frame(self):
-        word_ids = get_word_ids(KEYPOINTS_PATH)
+        word_ids = get_word_ids(WORDS_JSON_PATH)
         ret, frame = self.capture.read()
         if not ret: return
         
