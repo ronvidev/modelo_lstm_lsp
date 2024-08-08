@@ -1,3 +1,4 @@
+import json
 import os
 import cv2
 from mediapipe.python.solutions.holistic import FACEMESH_CONTOURS, POSE_CONNECTIONS, HAND_CONNECTIONS
@@ -26,12 +27,9 @@ def there_hand(results: NamedTuple) -> bool:
     return results.left_hand_landmarks or results.right_hand_landmarks
 
 def get_word_ids(path):
-    out = []
-    for action in os.listdir(path):
-        name, ext = os.path.splitext(action)
-        if ext == ".h5":
-            out.append(name)
-    return out
+    with open(path, 'r') as json_file:
+        data = json.load(json_file)
+        return data.get('word_ids')
 
 # CAPTURE SAMPLES
 def draw_keypoints(image, results):
