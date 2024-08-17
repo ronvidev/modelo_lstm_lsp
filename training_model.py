@@ -1,5 +1,3 @@
-import os
-import json
 import numpy as np
 from model import get_model
 from tensorflow.keras.preprocessing.sequence import pad_sequences
@@ -10,12 +8,10 @@ from helpers import get_word_ids, get_sequences_and_labels
 from constants import *
 
 def training_model(model_path, epochs=500):
-    data = {}
-    word_ids = get_word_ids(KEYPOINTS_PATH) # ['word1', 'word2', 'word3]
+    word_ids = get_word_ids(WORDS_JSON_PATH ) # ['word1', 'word2', 'word3]
     
     sequences, labels = get_sequences_and_labels(word_ids)
     
-    # sequences = pad_sequences(sequences, padding='pre', dtype='float32', value=0)
     sequences = pad_sequences(sequences, maxlen=int(MODEL_FRAMES), padding='pre', truncating='post', dtype='float16')
     
     X = np.array(sequences)
@@ -26,7 +22,6 @@ def training_model(model_path, epochs=500):
     
     model = get_model(int(MODEL_FRAMES), len(word_ids))
     model.fit(X_train, y_train, validation_data=(X_val, y_val), epochs=epochs, batch_size=8, callbacks=[early_stopping])
-    # model.fit(X, y, epochs=epochs, callbacks=[early_stopping])
     
     model.summary()
     model.save(model_path)
