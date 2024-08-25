@@ -1,5 +1,5 @@
 gTTS==2.5.1
-keras==2.10.0
+keras==2.13.1
 mediapipe==0.10.11
 numpy==1.26.4
 opencv_contrib_python==4.9.0.80
