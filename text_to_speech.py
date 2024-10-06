@@ -4,7 +4,7 @@ import pygame
 from time import sleep
 
 def text_to_speech(text):
-    tts = gTTS(text=text, lang='es')
+    tts = gTTS(text=text, lang='pt')
     filename = "speech.mp3"
     tts.save(filename)
     

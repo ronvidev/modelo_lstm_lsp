@@ -7,3 +7,5 @@ frame_actions
 data
 videos
 .old
+.venv
+*.keras
